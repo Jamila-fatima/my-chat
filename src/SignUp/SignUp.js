@@ -45,7 +45,7 @@ class SignUp extends Component {
                         Sign Up!
                    </Typography>
 
-                    <form onSubmit={(e) => this.submit.SignUp(e)} className={classes.form}>
+                    <form onSubmit={(e) => this.submitSignup(e)} className={classes.form}>
                         <FormControl required fullWidth margin="normal">
                             <InputLabel htmlFor="signup-email-input">Enter Your Email</InputLabel>
                             <Input autoComplete="email" onChange={(e) => this.userTyping('email', e)} autoFocus id="signup-input-email"></Input>
