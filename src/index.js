@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import { Route , BrowserRouter as Router } from 'react-router-dom';
+import { Route , BrowserRouter as Router} from 'react-router-dom';
 import LogInComponent from './LogIn/LogIn';
 import SignUpComponent from './SignUp/SignUp';
 import DashBoardComponent from './DashBoard/DashBoard';
@@ -13,13 +13,13 @@ require("firebase/firestore");
 
 firebase.initializeApp({
     apiKey: "AIzaSyBMdqCD7irGttc0z1KZzX9TwwOdJ5xOlL0",
-    authDomain: "chat-app-d449a.firebaseapp.com",
-    databaseURL: "https://chat-app-d449a.firebaseio.com",
-    projectId: "chat-app-d449a",
-    storageBucket: "chat-app-d449a.appspot.com",
-    messagingSenderId: "163305292760",
-    appId: "1:163305292760:web:9993b526bd0b88b0a0a8ad",
-    measurementId: "G-8XJX6QBKQ5"
+  authDomain: "chat-app-d449a.firebaseapp.com",
+  databaseURL: "https://chat-app-d449a.firebaseio.com",
+  projectId: "chat-app-d449a",
+  storageBucket: "chat-app-d449a.appspot.com",
+  messagingSenderId: "163305292760",
+  appId: "1:163305292760:web:9288e160873fdecca0a8ad",
+  measurementId: "G-F0JWNJBW7V"
 });
 
 const routing = (
@@ -30,6 +30,8 @@ const routing = (
             <Route path="/SignUp" component = {SignUpComponent}></Route>
             <Route path="/DashBoard" component = {DashBoardComponent}></Route>
             
+
+            {/* fallback route / wildcard */}
 
         </div>
     </Router>

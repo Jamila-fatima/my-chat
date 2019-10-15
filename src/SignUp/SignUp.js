@@ -45,7 +45,7 @@ class SignUp extends Component {
                         Sign Up!
                    </Typography>
 
-                    <form onSubmit={(e) => this.submit.SignUp(e)} className={classes.form}>
+                    <form onSubmit={(e) => this.submitSignUp(e)} className={classes.form}>
                         <FormControl required fullWidth margin="normal">
                             <InputLabel htmlFor="signup-email-input">Enter Your Email</InputLabel>
                             <Input autoComplete="email" onChange={(e) => this.userTyping('email', e)} autoFocus id="signup-input-email"></Input>
@@ -106,17 +106,41 @@ class SignUp extends Component {
 
             default:
                 break;
+
         }
 
     }
 
-    submitSignup = (e) => {
+    submitSignUp = (e) => {
         e.preventDefault();
 
         if(!this.formIsValid()) {
             this.setState({ signupError: 'Passwords do not match' });
             return;
           }
+          firebase
+          .auth()
+          .createUserWithEmailAndPassword(this.state.email,this.state.password)
+          .then(authRes =>  {
+              const userObj ={
+                  email: authRes.user.email
+              };
+              firebase
+              .firestore()
+              .collection('user')
+              .doc(this.state.email)
+              .set(userObj)
+              .then(() => {
+                  this.props.history.push('/DashBoard')
+              }, dbError => { console.log(dbError);
+                this.setState({signupError: 'failed to add user'});
+              } )
+
+
+          }, authErr => {
+              console.log(authErr);
+              this.setState({signupError: 'failed to add user'});
+          })
 
     }
 }
