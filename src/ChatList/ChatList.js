@@ -75,6 +75,7 @@ class ChatList extends Component {
                <main className={classes.root}>
                <Button variant='contained'
                fullWidth
+               color='primary'
                onClick={this.newChat}
                className={classes.newChatBtn}
                >New Message

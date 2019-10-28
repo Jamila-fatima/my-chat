@@ -1,5 +1,7 @@
 import ChatList from '../ChatList/ChatList';
 import React, { Component } from 'react';
+
+
 // import Styles from './Styles';
 
 
@@ -61,7 +63,7 @@ componentDidMount = () => {
                     });
                     console.log(this.state);
 
-                })
+                });
 
         }
 

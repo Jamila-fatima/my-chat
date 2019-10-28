@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 // import React from 'react';
-import Styles from './Styles';
+// import Styles from './Styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
@@ -11,7 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import styles from '../SignUp/Styles';
-import { typography } from '@material-ui/system';
+// import { typography } from '@material-ui/system';
 
 const firebase = require("firebase");
 
