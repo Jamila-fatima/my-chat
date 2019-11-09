@@ -48,8 +48,6 @@ import { withStyles } from '@material-ui/core/styles';
 
     userTyping =(e) => e.keyCode===13 ? this.SubmitMessage(): this.setState({chatText:e.target.value})
     messagevalid= (txt) => txt && txt.replace(/\s/g,'').length;
-    userClickedInput= () => {
-        console.log('clicked input')
-    }
+    userClickedInput= () => this.props.messageReadFn();
 }
 export default withStyles(Styles)(ChatTextBox);

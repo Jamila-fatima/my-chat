@@ -4,8 +4,9 @@ import Styles from './Styles';
 import { Button, withStyles } from '@material-ui/core';
 import ChatView from '../ChatView/ChatView';
 import ChatTextBox from '../ChatTextBox/ChatTextBox';
+import { async } from 'q';
+import NewChat from '../NewChat/NewChat';
 
-// import ChatTextBoxComponent from '../ChatTextBox/chatTextBox'
 
 
 const firebase = require("firebase");
@@ -40,12 +41,16 @@ class DashBoard extends Component {
                 {
                     this.state.newChatFormVisible ? null :
                         <ChatView user={this.state.email}
-                            chat={this.state.chats[this.state.selectedChat]}> </ChatView>
-
-
+                            chat={this.state.chats[this.state.selectedChat]}>
+                        </ChatView>
                 }
-                <ChatTextBox submitMessageFn={this.submitMessage}></ChatTextBox>
-
+                {
+                    this.state.selectedChat !== null && !this.state.newChatFormVisible ?
+                        <ChatTextBox messageReadFn={this.messageRead} submitMessageFn={this.submitMessage}></ChatTextBox> : null
+                }
+                {
+                  this.state.newChatFormVisible ? <NewChat goToChatFn={this.goToChat} newChatSubmitFn={this.newChatSubmit}></NewChat> : null
+                }
 
                 <Button className={classes.signOutBtn} onClick={this.signOut}> Sign Out</Button>
 
@@ -55,9 +60,10 @@ class DashBoard extends Component {
 
     signOut = () => firebase.auth().signOut();
 
-    selectChat = (chatIndex) => {
+    selectChat = async (chatIndex) => {
         console.log('index:', chatIndex);
-        this.setState({ selectedChat: chatIndex });
+        await this.setState({ selectedChat: chatIndex });
+        this.messageRead();
 
     }
 
@@ -75,15 +81,64 @@ class DashBoard extends Component {
                 }),
                 receiverHasRead: false
             });
-           
+
 
     }
+
+    messageRead = () => {
+        const docKey = this.buildDocKey(this.state.chats[this.state.selectedChat].users.filter(_usr => _usr !== this.state.email)[0]);
+        if (this.clickedChatWhereNotsender(this.state.selectedChat)) {
+            firebase
+                .firestore()
+                .collection('chats')
+                .doc(docKey)
+                .update({ receiverHasRead: true })
+        } else {
+            console.log('clicked msg where the user was the sender');
+        }
+    }
+
+    goToChat = async (docKey,msg) => {
+        const usersInChat = docKey.split(':');
+        const chat = this.state.chats.find(_chat => usersInChat.every(_usr => _chat.users.includes(_usr)));
+     this.setState({newChatFormVisible:false});
+     await this.selectChat(this.state.chats.indexOf(chat));
+     this.submitMessage(msg);
+
+    }
+   
+    
+    newChatSubmit = async (chatObj) => {
+        const docKey = this.buildDocKey(chatObj.sendTo);
+        await 
+          firebase
+            .firestore()
+            .collection('chats')
+            .doc(docKey)
+            .set({
+              messages: [{
+                message: chatObj.message,
+                sender: this.state.email
+              }],
+              users: [this.state.email, chatObj.sendTo],
+              receiverHasRead: false
+            })
+        this.setState({ newChatFormVisible: false });
+        this.selectChat(this.state.chats.length - 1);
+      }
+
+    clickedChatWhereNotsender = (chatIndex) => this.state.chats[chatIndex].messages[this.state.chats[chatIndex].messages.length - 1].sender !== this.state.email;
+
+
+
+
     buildDocKey = (friend) => [this.state.email, friend].sort().join(':');
 
+    newChatBtnClicked = () => this.setState({ newChatFormVisible: true, selectedChat: null });
 
-    newChatBtnClicked = () => this.setState({
-        newChatFormVisible: true, selectChat: null
-    });
+    // newChatBtnClicked = () => this.setState({
+    //     newChatFormVisible: true, selectChat: null
+    // });
 
     componentDidMount = () => {
         firebase.auth().onAuthStateChanged(async _usr => {
