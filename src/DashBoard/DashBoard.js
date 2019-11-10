@@ -4,7 +4,7 @@ import Styles from './Styles';
 import { Button, withStyles } from '@material-ui/core';
 import ChatView from '../ChatView/ChatView';
 import ChatTextBox from '../ChatTextBox/ChatTextBox';
-import { async } from 'q';
+// import { async } from 'q';
 import NewChat from '../NewChat/NewChat';
 
 
