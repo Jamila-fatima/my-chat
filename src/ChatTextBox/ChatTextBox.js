@@ -7,47 +7,49 @@ import { withStyles } from '@material-ui/core/styles';
 // import { TextField } from '@material-ui/core';
 
 
- class ChatTextBox extends Component {
- constructor(){
-     super();
-     this.state = {
-         chatText: ''
-     };
+class ChatTextBox extends Component {
+    constructor() {
+        super();
+        this.state = {
+            chatText: ''
+        };
 
- }
+    }
 
     render() {
 
         const { classes } = this.props;
-        return(
+        return (
             <div className={classes.chatTextBoxContainer}>
 
-            <TextField 
-            placeholder='Type your message...'
-            onKeyUp={(e) => this.userTyping(e)}
-            id='chattextbox'
-            onFocus={this.userClickedInput}
-            className={classes.chatTextBox}>
-            
-            </TextField>
-            <Send onClick={this.SubmitMessage} className={classes.sendBtn}></Send>
+                <TextField
+                    placeholder='Type your message...'
+                    onKeyUp={(e) => this.userTyping(e)}
+                    id='chattextbox'
+                    onFocus={this.userClickedInput}
+                    className={classes.chatTextBox}>
+
+                </TextField>
+                <Send onClick={this.submitMessage} className={classes.sendBtn}></Send>
             </div>
         );
 
-      
+
     }
-    SubmitMessage = () => {
+   
+
+    userTyping = (e) => e.keyCode === 13 ? this.submitMessage() : this.setState({ chatText: e.target.value });
+    messageValid = (txt) => txt && txt.replace(/\s/g, '').length;
+
+    submitMessage = () => {
         console.log('submit');
-        if(this.messagevalid(this.state.chatText)){
+        if (this.messageValid(this.state.chatText)) {
             this.props.submitMessageFn(this.state.chatText);
-            document.getElementById('chattextbox').value=';'
-            
+            document.getElementById('chattextbox').value = '';
+
         }
 
     }
-
-    userTyping =(e) => e.keyCode===13 ? this.SubmitMessage(): this.setState({chatText:e.target.value})
-    messagevalid= (txt) => txt && txt.replace(/\s/g,'').length;
-    userClickedInput= () => this.props.messageReadFn();
+    userClickedInput = () => this.props.messageReadFn();
 }
 export default withStyles(Styles)(ChatTextBox);

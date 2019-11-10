@@ -36,7 +36,7 @@ class SignUp extends Component {
 
         return (
 
-            <main className={classes.main}>
+            <main  className={classes.main}>
                 <CssBaseline>
 
                 </CssBaseline>
