@@ -92,16 +92,18 @@ class ChatList extends Component {
     }
 
 
+    userIsSender = (chat) => chat.messages[chat.messages.length - 1].sender === this.props.userEmail;
+    newChat = () => this.props.newChatBtnFn();
+    selectChat = (index) => this.props.selectChatFn(index);
+    // newChat = () => {
+    //     this.props.newChatBtnFn();
+    // }
 
-    newChat = () => {
-        this.props.newChatBtnFn();
-    }
-
-    selectChat = (index) => {
+    // selectChat = (index) => {
     //  console.log('select chat',index)
-    this.props.selectChatFn(index);
-    }
-    userIsSender = (chat) =>  chat.messages[chat.messages.length -1].sender === this.props.userEmail;
+    // this.props.selectChatFn(index);
+    // }
+    // userIsSender = (chat) =>  chat.messages[chat.messages.length -1].sender === this.props.userEmail;
 }
 
 export default withStyles(Style)(ChatList);

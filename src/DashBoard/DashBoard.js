@@ -60,12 +60,11 @@ class DashBoard extends Component {
 
     signOut = () => firebase.auth().signOut();
 
+   
     selectChat = async (chatIndex) => {
-        console.log('index:', chatIndex);
-        await this.setState({ selectedChat: chatIndex });
+        await this.setState({ selectedChat: chatIndex, newChatFormVisible: false });
         this.messageRead();
-
-    }
+      }
 
     submitMessage = (msg) => {
         const docKey = this.buildDocKey(this.state.chats[this.state.selectedChat].users.filter(_usr => _usr !== this.state.email)[0]);
@@ -98,14 +97,13 @@ class DashBoard extends Component {
         }
     }
 
-    goToChat = async (docKey,msg) => {
+    goToChat = async (docKey, msg) => {
         const usersInChat = docKey.split(':');
-        const chat = this.state.chats.find(_chat => usersInChat.every(_usr => _chat.users.includes(_usr)));
-     this.setState({newChatFormVisible:false});
-     await this.selectChat(this.state.chats.indexOf(chat));
-     this.submitMessage(msg);
-
-    }
+        const chat = this.state.chats.find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
+        this.setState({ newChatFormVisible: false });
+        await this.selectChat(this.state.chats.indexOf(chat));
+        this.submitMessage(msg);
+      }
    
     
     newChatSubmit = async (chatObj) => {
@@ -129,16 +127,11 @@ class DashBoard extends Component {
 
     clickedChatWhereNotsender = (chatIndex) => this.state.chats[chatIndex].messages[this.state.chats[chatIndex].messages.length - 1].sender !== this.state.email;
 
-
-
-
     buildDocKey = (friend) => [this.state.email, friend].sort().join(':');
 
     newChatBtnClicked = () => this.setState({ newChatFormVisible: true, selectedChat: null });
 
-    // newChatBtnClicked = () => this.setState({
-    //     newChatFormVisible: true, selectChat: null
-    // });
+   
 
     componentDidMount = () => {
         firebase.auth().onAuthStateChanged(async _usr => {
