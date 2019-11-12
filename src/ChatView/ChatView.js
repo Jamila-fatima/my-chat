@@ -24,7 +24,7 @@ class ChatView extends Component {
 
     render() {
 
-        const { classes, chat, user } = this.props;
+        const { classes,  user } = this.props;
 
         if (this.props.chat === undefined) {
             return (

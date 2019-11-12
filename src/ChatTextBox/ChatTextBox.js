@@ -36,7 +36,7 @@ class ChatTextBox extends Component {
 
 
     }
-   
+
 
     userTyping = (e) => e.keyCode === 13 ? this.submitMessage() : this.setState({ chatText: e.target.value });
     messageValid = (txt) => txt && txt.replace(/\s/g, '').length;

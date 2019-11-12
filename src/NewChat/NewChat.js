@@ -27,7 +27,7 @@ class NewChat extends Component {
         <CssBaseline />
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h5">Send A Message!</Typography>
-          <form className={classes.form} onSubmit={(e) => this.submitNewChat(e)}>
+          <form className={classes.form} >
             <FormControl fullWidth>
               <InputLabel htmlFor='new-chat-username'>
                 Enter Your Friend's Email
@@ -49,7 +49,7 @@ class NewChat extends Component {
                 id='new-chat-message'>
               </Input>
             </FormControl>
-            <Button fullWidth variant='contained' color='primary' className={classes.submit} type='submit'>Send</Button>
+            <Button fullWidth variant='contained' color='primary' className={classes.submit} onClick={(e) => this.submitNewChat(e)} type='submit'>Send</Button>
           </form>
           {
             this.state.serverError ?
@@ -63,8 +63,8 @@ class NewChat extends Component {
     );
   }
 
-  userTyping = (type, e) => {
-    switch (type) {
+  userTyping = (inputType, e) => {
+    switch (inputType) {
       case 'username':
         this.setState({ username: e.target.value });
         break;
@@ -94,8 +94,8 @@ class NewChat extends Component {
     });
   }
 
+  // goToChat = () => this.props.goToChatFn(this.buildDocKey(), this.state.message);
   goToChat = () => this.props.goToChatFn(this.buildDocKey(), this.state.message);
-
 
 
 
@@ -104,7 +104,8 @@ class NewChat extends Component {
   }
   chatExists = async () => {
     const docKey = this.buildDocKey();
-    const chat = await firebase
+    const chat = await
+     firebase
       .firestore()
       .collection('chats')
       .doc(docKey)
@@ -113,14 +114,16 @@ class NewChat extends Component {
     return chat.exists;
   }
   userExists = async () => {
-    const usersSnapshot = await firebase
-      .firestore()
-      .collection('users')
-      .get();
+    const usersSnapshot = await 
+    firebase
+    .firestore()
+    .collection('user')
+    .get();
     const exists = usersSnapshot.docs
-      .map(_doc => _doc.data().email)
-      .includes(this.state.username);
-    // this.setState({serverError: !exists});
+    .map(_doc => _doc.data().email)
+    .includes(this.state.username);
+    console.log(usersSnapshot.docs)
+    this.setState({serverError: !exists});
     return exists;
   }
 }

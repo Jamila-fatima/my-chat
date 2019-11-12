@@ -26,9 +26,9 @@ class DashBoard extends Component {
     render() {
 
         const { classes } = this.props;
-       
 
-       
+
+
         return (
             <div >
 
@@ -40,7 +40,7 @@ class DashBoard extends Component {
                     chats={this.state.chats}
                     userEmail={this.state.email}
                     selectedChatIndex={this.state.selectedChat}>
-                    
+
                 </ChatList>
                 {
                     this.state.newChatFormVisible ? null :
@@ -53,7 +53,7 @@ class DashBoard extends Component {
                         <ChatTextBox messageReadFn={this.messageRead} submitMessageFn={this.submitMessage}></ChatTextBox> : null
                 }
                 {
-                  this.state.newChatFormVisible ? <NewChat goToChatFn={this.goToChat} newChatSubmitFn={this.newChatSubmit}></NewChat> : null
+                    this.state.newChatFormVisible ? <NewChat goToChatFn={this.goToChat} newChatSubmitFn={this.newChatSubmit}></NewChat> : null
                 }
 
                 <Button className={classes.signOutBtn} onClick={this.signOut}> Sign Out</Button>
@@ -64,10 +64,10 @@ class DashBoard extends Component {
 
     signOut = () => firebase.auth().signOut();
     submitMessage = (msg) => {
-        const docKey = this.buildDocKey(this.state.chats[this.state.selectedChat].users.filter(_usr => _usr !== this.state.email)[0]);
-        console.log({ docKey });
-        
-        firebase
+        const docKey = this.buildDocKey(this.state.chats[this.state.selectedChat]
+            .users
+            .filter(_usr => _usr !== this.state.email)[0]);
+            firebase
             .firestore()
             .collection('chats')
             .doc(docKey)
@@ -79,31 +79,32 @@ class DashBoard extends Component {
                 }),
                 receiverHasRead: false
             });
-           console.log(docKey);
 
     }
+
     buildDocKey = (friend) => [this.state.email, friend].sort().join(':');
 
     newChatBtnClicked = () => this.setState({ newChatFormVisible: true, selectedChat: null });
 
     newChatSubmit = async (chatObj) => {
         const docKey = this.buildDocKey(chatObj.sendTo);
-        await 
-          firebase
-            .firestore()
-            .collection('chats')
-            .doc(docKey)
-            .set({
-              messages: [{
-                message: chatObj.message,
-                sender: this.state.email
-              }],
-              users: [this.state.email, chatObj.sendTo],
-              receiverHasRead: false
-            })
+        // console.log({docKey})
+        await
+            firebase
+                .firestore()
+                .collection('chats')
+                .doc(docKey)
+                .set({
+                    messages: [{
+                        message: chatObj.message,
+                        sender: this.state.email
+                    }],
+                    users: [this.state.email, chatObj.sendTo],
+                    receiverHasRead: false
+                })
         this.setState({ newChatFormVisible: false });
         this.selectChat(this.state.chats.length - 1);
-      }
+    }
 
 
 
@@ -111,24 +112,26 @@ class DashBoard extends Component {
     selectChat = async (chatIndex) => {
         await this.setState({ selectedChat: chatIndex, newChatFormVisible: false });
         this.messageRead();
-      }
+    }
 
-    
 
-      goToChat = async (docKey, msg) => {
+
+    goToChat = async (docKey, msg) => {
         const usersInChat = docKey.split(':');
         const chat = this.state.chats.find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
         this.setState({ newChatFormVisible: false });
         await this.selectChat(this.state.chats.indexOf(chat));
         this.submitMessage(msg);
-      }
-   
+    }
+
 
 
 
 
     messageRead = () => {
         const docKey = this.buildDocKey(this.state.chats[this.state.selectedChat].users.filter(_usr => _usr !== this.state.email)[0]);
+        console.log(docKey, 'dockey')
+        return;
         if (this.clickedChatWhereNotSender(this.state.selectedChat)) {
             firebase
                 .firestore()
@@ -140,13 +143,13 @@ class DashBoard extends Component {
         }
     }
 
-   
-    
-   
+
+
+
     clickedChatWhereNotSender = (chatIndex) => this.state.chats[chatIndex].messages[this.state.chats[chatIndex].messages.length - 1].sender !== this.state.email;
 
-   
-   
+
+
 
     componentWillMount = () => {
         firebase.auth().onAuthStateChanged(async _usr => {
