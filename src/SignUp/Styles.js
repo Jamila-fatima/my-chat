@@ -8,6 +8,7 @@ const styles = theme => ({
         width: 400,
         marginLeft: 'auto',
         marginRight: 'auto',
+       
       },
     },
     paper: {
@@ -16,10 +17,14 @@ const styles = theme => ({
       flexDirection: 'column',
       alignItems: 'center',
       padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+      backgroundImage:'linear-gradient(#654ea3, #eaafc8)'
     },
     form: {
       width: '100%',
       marginTop: theme.spacing.unit,
+      
+    
+    
     },
     submit: {
       marginTop: theme.spacing.unit * 3,
